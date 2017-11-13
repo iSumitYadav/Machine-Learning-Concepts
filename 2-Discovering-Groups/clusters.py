@@ -212,9 +212,21 @@ def kMeansCluster(rows, distance=pearson, k=4):
 	
 	return bestMatches
 
+def tanimoto(v1, v2):
+	c1 = c2 = share = 0
+
+	for i in range(len(v1)):
+		if v1[i]:
+			c1 += 1
+		if v2[i]:
+			c2 += 1
+		if v1[i] and v2[i]:
+			share += 1
+
+	return 1.0 - (float(share)/(c1+c2-share))
 
 (blognames, words, data) = readfile('/media/sumit/Storage/Downloads/Machine-Learning-Concepts/2-Discovering-Groups/blogdata.txt')
-
+'''
 #hierarchical clustering algorithm
 clust = hcluster(data)
 
@@ -231,3 +243,9 @@ kclust = kMeansCluster(data, k=4)
 for clust in kclust:
 	print([blognames[r] for r in clust])
 	print('='*300)
+'''
+# Using Tanimoto distance for the value given as either 0 or 1
+(wants, people, data) = readfile('/media/sumit/Storage/Downloads/Machine-Learning-Concepts/2-Discovering-Groups/zebo.txt')
+
+clust = hcluster(data, distance=tanimoto)
+drawDendrogram(clust, wants, img_file='tanimoto.jpg')
